@@ -2,16 +2,23 @@ package br.com.dio.desafio.dominio;
 
 import java.time.LocalDate;
 
-public class Mentoria extends Conteudo{
+public class Mentoria extends Conteudo {
 
     private LocalDate data;
+    private static final double XP_MENTORIA = XP_PADRAO + 20d;
+
+    public Mentoria() {
+    }
+
+    public Mentoria(String titulo, String descricao, LocalDate data) {
+        super.setTitulo(titulo);
+        super.setDescricao(descricao);
+        this.data = data;
+    }
 
     @Override
     public double calcularXp() {
-        return XP_PADRAO + 20d;
-    }
-
-    public Mentoria() {
+        return XP_MENTORIA;
     }
 
     public LocalDate getData() {
@@ -19,7 +26,12 @@ public class Mentoria extends Conteudo{
     }
 
     public void setData(LocalDate data) {
-        this.data = data;
+        // Verifica se a data da mentoria é no futuro
+        if (data.isBefore(LocalDate.now())) {
+            System.err.println("A data da mentoria deve ser uma data futura!");
+        } else {
+            this.data = data;
+        }
     }
 
     @Override
@@ -28,6 +40,7 @@ public class Mentoria extends Conteudo{
                 "titulo='" + getTitulo() + '\'' +
                 ", descricao='" + getDescricao() + '\'' +
                 ", data=" + data +
+                ", XP=" + XP_MENTORIA +
                 '}';
     }
 }

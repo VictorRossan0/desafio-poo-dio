@@ -1,6 +1,7 @@
 package br.com.dio.desafio.dominio;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -11,16 +12,24 @@ public class Bootcamp {
     private String descricao;
     private final LocalDate dataInicial = LocalDate.now();
     private final LocalDate dataFinal = dataInicial.plusDays(45);
-    private Set<Dev> devsInscritos = new HashSet<>();
-    private Set<Conteudo> conteudos = new LinkedHashSet<>();
+    private final Set<Dev> devsInscritos = new HashSet<>();
+    private final Set<Conteudo> conteudos = new LinkedHashSet<>();
 
+    public Bootcamp(String nome, String descricao) {
+        this.setNome(nome);
+        this.setDescricao(descricao);
+    }
 
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        if (nome == null || nome.trim().isEmpty()) {
+            System.err.println("O nome não pode ser nulo ou vazio.");
+        } else {
+            this.nome = nome;
+        }
     }
 
     public String getDescricao() {
@@ -28,7 +37,11 @@ public class Bootcamp {
     }
 
     public void setDescricao(String descricao) {
-        this.descricao = descricao;
+        if (descricao == null || descricao.trim().isEmpty()) {
+            System.err.println("A descrição não pode ser nula ou vazia.");
+        } else {
+            this.descricao = descricao;
+        }
     }
 
     public LocalDate getDataInicial() {
@@ -43,16 +56,28 @@ public class Bootcamp {
         return devsInscritos;
     }
 
-    public void setDevsInscritos(Set<Dev> devsInscritos) {
-        this.devsInscritos = devsInscritos;
-    }
-
     public Set<Conteudo> getConteudos() {
         return conteudos;
     }
 
-    public void setConteudos(Set<Conteudo> conteudos) {
-        this.conteudos = conteudos;
+    public void adicionarConteudo(Conteudo conteudo) {
+        this.conteudos.add(conteudo);
+    }
+
+    public void removerConteudo(Conteudo conteudo) {
+        this.conteudos.remove(conteudo);
+    }
+
+    public void inscreverDev(Dev dev) {
+        this.devsInscritos.add(dev);
+    }
+
+    public void desinscreverDev(Dev dev) {
+        this.devsInscritos.remove(dev);
+    }
+
+    public long calcularDiasRestantes() {
+        return ChronoUnit.DAYS.between(LocalDate.now(), dataFinal);
     }
 
     @Override
@@ -60,7 +85,12 @@ public class Bootcamp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Bootcamp bootcamp = (Bootcamp) o;
-        return Objects.equals(nome, bootcamp.nome) && Objects.equals(descricao, bootcamp.descricao) && Objects.equals(dataInicial, bootcamp.dataInicial) && Objects.equals(dataFinal, bootcamp.dataFinal) && Objects.equals(devsInscritos, bootcamp.devsInscritos) && Objects.equals(conteudos, bootcamp.conteudos);
+        return Objects.equals(nome, bootcamp.nome) && 
+               Objects.equals(descricao, bootcamp.descricao) && 
+               Objects.equals(dataInicial, bootcamp.dataInicial) && 
+               Objects.equals(dataFinal, bootcamp.dataFinal) && 
+               Objects.equals(devsInscritos, bootcamp.devsInscritos) && 
+               Objects.equals(conteudos, bootcamp.conteudos);
     }
 
     @Override
